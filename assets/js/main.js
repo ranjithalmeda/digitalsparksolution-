@@ -91,7 +91,7 @@
   }
 
   /**
-   * Back to top button
+   *
    */
   let backtotop = select('.back-to-top')
   if (backtotop) {
@@ -253,33 +253,37 @@
       mirror: false
     });
   });
+  /**
+   * Circle animation on scroll
+   */
+  const initCircleAnimation = () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        } else {
+          entry.target.classList.remove('animate');
+        }
+      });
+    }, { threshold: 0.2 });
 
-  // Get the "Services" section and the circle-mark element
-const servicesSection = document.getElementById('services');
-const circleMark = document.getElementById('highlight');
-
-// Function to check if the element is in the viewport
-function isInViewport(element) {
-    const rect = element.getBoundingClientRect();
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-}
-
-// Add an event listener for scroll
-window.addEventListener('scroll', () => {
-    if (isInViewport(servicesSection)) {
-        circleMark.classList.add('active');
-    } else {
-        circleMark.classList.remove('active');
+    const circle = select('.circle-mark');
+    if (circle) {
+      observer.observe(circle);
     }
-});
+  }
 
-// Add the active class when the circle is highlighted
-document.querySelector('.circle-mark.active::after').style.border = '2px solid red';
-
+  /**
+   * Initialize when document is ready
+   */
+  window.addEventListener('load', () => {
+    AOS.init({
+      duration: 1000,
+      easing: "ease-in-out",
+      once: true,
+      mirror: false
+    });
+    initCircleAnimation();
+  });
 
 })()
